@@ -2,6 +2,8 @@
 
 namespace ExchangeOffice.Application.Services.Interfaces {
 	public interface IRateService {
+		public Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId);
+		public Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId);
 		public Task<IEnumerable<RateDto>> GetRatesAsync();
 		public Task<RateDto> GetRateByIdAsync(Guid id);
 		public Task<RateDto> GetRateAsync(Guid baseCurrencyId, Guid targetCurrencyId);

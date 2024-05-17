@@ -14,6 +14,16 @@ namespace ExchangeOffice.Application.Services {
 			_mapper = mapper;
 		}
 
+		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
+			var daos = await _repo.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
+			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
+			return dtos;
+		}
+		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
+			var daos = await _repo.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
+			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
+			return dtos;
+		}
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			var daos = await _repo.GetRatesAsync();
 			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);

@@ -11,6 +11,28 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			_context = context;
 		}
 
+		public async Task<IEnumerable<Rate>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
+			var rates = await Task.FromResult(_context.Rates
+				.Include(x => x.TargetCurrency)
+				.Include(x => x.BaseCurrency)
+				.Where(x => x.IsActive == true && x.TargetCurrencyId == targetCurrencyId));
+			if (rates.Count() == 0) {
+				throw new RecordNotFoundException(404, "DataAccess", "Rate with such target currencies id not found");
+			}
+			return rates;
+		}
+
+		public async Task<IEnumerable<Rate>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
+			var rates = await Task.FromResult(_context.Rates
+				.Include(x => x.TargetCurrency)
+				.Include(x => x.BaseCurrency)
+				.Where(x => x.IsActive == true && x.BaseCurrencyId == baseCurrencyId));
+			if (rates.Count() == 0) {
+				throw new RecordNotFoundException(404, "DataAccess", "Rate with such base currencies id not found");
+			}
+			return rates;
+		}
+
 		public async Task<IEnumerable<Rate>> GetRatesAsync() {
 			return await Task.FromResult(_context.Rates
 				.Include(x => x.TargetCurrency)

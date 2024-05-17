@@ -11,6 +11,16 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
+		[HttpGet("getallByTargetCurrencyId")]
+		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
+			return await _manager.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
+		}
+
+		[HttpGet("getallByBaseCurrencyId")]
+		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
+			return await _manager.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
+		}
+
 		[HttpGet("getall")]
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			return await _manager.GetRatesAsync();

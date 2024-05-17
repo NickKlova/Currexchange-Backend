@@ -9,6 +9,12 @@ namespace ExchangeOffice.Application.Managers {
 			_service = service;
 		}
 
+		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
+			return await _service.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
+		}
+		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
+			return await _service.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
+		}
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			return await _service.GetRatesAsync();
 		}

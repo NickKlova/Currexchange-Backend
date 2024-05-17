@@ -2,6 +2,8 @@
 
 namespace ExchangeOffice.DataAccess.Repositories.Interfaces {
 	public interface IRateRepository {
+		public Task<IEnumerable<Rate>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId);
+		public Task<IEnumerable<Rate>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId);
 		public Task<IEnumerable<Rate>> GetRatesAsync();
 		public Task<Rate> GetRateByIdAsync(Guid id);
 		public Task<Rate> GetRateAsync(Guid baseCurrencyId, Guid targetCurrencyId);
