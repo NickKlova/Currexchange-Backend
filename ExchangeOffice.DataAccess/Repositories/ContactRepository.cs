@@ -3,6 +3,7 @@ using ExchangeOffice.DataAccess.DAO;
 using ExchangeOffice.DataAccess.Repositories.Abstractions;
 using ExchangeOffice.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class ContactRepository : BaseRepository, IContactRepository {
@@ -29,11 +30,12 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		}
 		public async Task<Contact> UpdateContactAsync(Contact entity) {
 			var oldEntity = await _context.Contacts.FindAsync(entity.Id);
-			if (oldEntity == null || entity.IsActive == false) {
+			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Contact with such id not found");
 			}
-			SetDefaultValues(entity);
 			entity.Id = oldEntity.Id;
+			entity.ModifiedOn = DateTime.UtcNow;
+			entity.IsActive = true;
 			_context.Contacts.Remove(oldEntity);
 			await _context.AddAsync(entity);
 			await _context.SaveChangesAsync();
