@@ -78,18 +78,28 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			return entity;
 		}
 		public async Task<Rate> UpdateRateAsync(Rate entity) {
-			var oldEntity = await _context.Rates.FindAsync(entity.Id);
+			var oldEntity = await _context.Rates
+				.Include(x=>x.BaseCurrency)
+				.Include(x=>x.TargetCurrency)
+				.Where(x=>x.Id == entity.Id && x.IsActive == true)
+				.FirstOrDefaultAsync();
 			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such id not found");
 			}
 			entity.Id = oldEntity.Id;
 			entity.ModifiedOn = DateTime.UtcNow;
+			entity.IsActive = true;
 			_context.Rates.Remove(oldEntity);
 			await _context.Rates.AddAsync(entity);
+			await _context.SaveChangesAsync();
 			return entity;
 		}
 		public async Task<Rate> DeleteRateAsync(Guid id) {
-			var entity = await _context.Rates.FindAsync(id);
+			var entity = await _context.Rates
+				.Include(x => x.BaseCurrency)
+				.Include(x => x.TargetCurrency)
+				.Where(x => x.Id == id && x.IsActive == true)
+				.FirstOrDefaultAsync();
 			if (entity == null || entity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "A rate with such id was not found in the database");
 			}
