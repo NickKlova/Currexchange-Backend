@@ -38,7 +38,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			if (currency == null || entity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Currency with such id not found in database, so entity didn't created");
 			}
-
+			entity.Currency = currency;
 			await _context.Funds.AddAsync(entity);
 			await _context.SaveChangesAsync();
 			return entity;
@@ -55,10 +55,12 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		}
 		public async Task<Fund> UpdateFundByIdAsync(Fund entity) {
 			var oldEntity = await _context.Funds.FindAsync(entity.Id);
-			if (oldEntity == null || entity.IsActive == false) {
+			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Fund with such id not found");
 			}
 			entity.ModifiedOn = DateTime.UtcNow;
+			entity.Id = oldEntity.Id;
+			entity.IsActive = true;
 			_context.Funds.Remove(oldEntity);
 			await _context.Funds.AddAsync(entity);
 			await _context.SaveChangesAsync();
