@@ -30,6 +30,8 @@ namespace ExchangeOffice.Application.Managers {
 			return await _service.UpdateCurrencyAsync(id, entity);
 		}
 		public async Task<CurrencyDto> DeleteCurrencyAsync(Guid id) {
+			var fund = await _fundManager.GetFundAsync(id);
+			await _fundManager.DeleteFundAsync(fund.Id);
 			return await _service.DeleteCurrencyAsync(id);
 		}
 	}
