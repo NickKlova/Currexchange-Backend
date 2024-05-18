@@ -30,11 +30,12 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		}
 		public async Task<Currency> UpdateCurrencyAsync(Currency entity) {
 			var oldEntity = await _context.Currencies.FindAsync(entity.Id);
-			if (oldEntity == null || entity.IsActive == false) {
+			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Currency with such id not found");
 			}
 			entity.ModifiedOn = DateTime.UtcNow;
 			entity.Id = oldEntity.Id;
+			entity.IsActive = true;
 			_context.Currencies.Remove(oldEntity);
 			await _context.AddAsync(entity);
 			await _context.SaveChangesAsync();

@@ -79,7 +79,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		}
 		public async Task<Rate> UpdateRateAsync(Rate entity) {
 			var oldEntity = await _context.Rates.FindAsync(entity.Id);
-			if (oldEntity == null || entity.IsActive == false) {
+			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such id not found");
 			}
 			entity.Id = oldEntity.Id;

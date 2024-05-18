@@ -37,6 +37,8 @@ namespace ExchangeOffice.DataAccess.Migrations
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Code = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Symbol = table.Column<string>(type: "text", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -143,7 +145,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ContactId = table.Column<Guid>(type: "uuid", nullable: false),
                     RateId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -179,7 +181,8 @@ namespace ExchangeOffice.DataAccess.Migrations
                     RateId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsSale = table.Column<bool>(type: "boolean", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsActual = table.Column<bool>(type: "boolean", nullable: false)
+                    ReservationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,6 +199,12 @@ namespace ExchangeOffice.DataAccess.Migrations
                         principalTable: "Rates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -234,6 +243,11 @@ namespace ExchangeOffice.DataAccess.Migrations
                 column: "RateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transactions_ReservationId",
+                table: "Transactions",
+                column: "ReservationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_ContactId",
                 table: "Users",
                 column: "ContactId");
@@ -251,22 +265,22 @@ namespace ExchangeOffice.DataAccess.Migrations
                 name: "Funds");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
-
-            migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Rates");
+                name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Contacts");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "Rates");
 
             migrationBuilder.DropTable(
                 name: "Currencies");

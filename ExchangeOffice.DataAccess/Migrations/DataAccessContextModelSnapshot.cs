@@ -67,11 +67,19 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -154,7 +162,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<Guid>("ContactId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateOn")
+                    b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsActive")
@@ -193,7 +201,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsActual")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsSale")
@@ -205,11 +213,16 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<Guid>("RateId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ReservationId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
 
                     b.HasIndex("RateId");
+
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("Transactions");
                 });
@@ -328,9 +341,17 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ExchangeOffice.DataAccess.DAO.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Contact");
 
                     b.Navigation("Rate");
+
+                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.User", b =>
