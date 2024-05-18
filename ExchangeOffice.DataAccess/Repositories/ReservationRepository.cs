@@ -35,6 +35,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			entity.Contact = await _contactRepo.GetContactAsync(entity.ContactId);
 			SetDefaultValues(entity);
 			await _context.Reservations.AddAsync(entity);
+			await _context.SaveChangesAsync();
 			return entity;
 
 		}
