@@ -41,7 +41,11 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.AsNoTracking());
 		}
 		public async Task<Rate> GetRateByIdAsync(Guid id) {
-			var entity = await _context.Rates.FindAsync(id);
+			var entity = await _context.Rates
+				.Include(x => x.BaseCurrency)
+				.Include(x => x.TargetCurrency)
+				.Where(x => x.Id == id && x.IsActive == true)
+				.FirstOrDefaultAsync();
 			if (entity == null || entity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such id not found");
 			}

@@ -17,14 +17,26 @@ namespace ExchangeOffice.DataAccess.Repositories {
 
 		public async Task<IEnumerable<Reservation>> GetReservationsAsync() {
 			return await Task.FromResult(_context.Reservations
-				.Where(x => x.IsActive == true)
-				.Include(x=>x.Contact)
-				.Include(x=>x.Rate)
+				.Include(x => x.Contact)
+				.Include(x => x.Rate)
+					.ThenInclude(r => r.TargetCurrency) // Включаем связанный объект TargetCurrency
+					.Include(x => x.Rate)
+					.ThenInclude(r => r.BaseCurrency) // Включаем связанный объект BaseCurrency
+				.Where(x=>x.IsActive)
 				.AsNoTracking());
 
 		}
 		public async Task<Reservation> GetReservationAsync(Guid id) {
-			var entity = await _context.Reservations.Include(x=>x.Contact).Include(x=>x.Rate).Where(x=>x.Id == id).AsNoTracking().FirstOrDefaultAsync();
+
+			var entity = await _context.Reservations
+				.Include(x => x.Contact)
+				.Include(x => x.Rate)
+					.ThenInclude(r => r.TargetCurrency) // Включаем связанный объект TargetCurrency
+					.Include(x => x.Rate)
+					.ThenInclude(r => r.BaseCurrency) // Включаем связанный объект BaseCurrency
+				.Where(x => x.Id == id)
+				.AsNoTracking()
+				.FirstOrDefaultAsync();
 			if (entity == null || entity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Reservation with such id not found");
 			}
@@ -33,6 +45,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		public async Task<Reservation> AddReservationAsync(Reservation entity) {
 			entity.Rate = await _rateRepo.GetRateByIdAsync(entity.RateId);
 			entity.Contact = await _contactRepo.GetContactAsync(entity.ContactId);
+			
 			SetDefaultValues(entity);
 			await _context.Reservations.AddAsync(entity);
 			await _context.SaveChangesAsync();
