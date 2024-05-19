@@ -8,8 +8,8 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 			CreateContactMappers();
 			CreateRateMappers();
 			CreateFundMappers();
-			CreateUserMappers();
 			CreateUserRoleMappers();
+			CreateUserMappers();
 			CreateTransactionMappers();
 			CreateReservationMappers();
 		}
@@ -55,6 +55,8 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 		private void CreateUserRoleMappers() {
 			CreateMap<IEnumerable<UserRole>, IEnumerable<UserRoleDto>>()
 				.ConvertUsing((src, dest, context) => src.Select(x => context.Mapper.Map<UserRoleDto>(x)));
+
+			CreateMap<UserRole, UserRoleDto>();
 		}
 
 		private void CreateContactMappers() {

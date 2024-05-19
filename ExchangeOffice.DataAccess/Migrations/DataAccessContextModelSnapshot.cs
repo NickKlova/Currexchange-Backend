@@ -61,14 +61,12 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -78,7 +76,6 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Symbol")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -266,16 +263,41 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedOn")
-                        .HasColumnType("uuid");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d2e6fa3f-4d4c-4e5f-9f15-90c8fea98721"),
+                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(544),
+                            Name = "Owner"
+                        },
+                        new
+                        {
+                            Id = new Guid("a9b8c7d6-5e4f-3a2b-1c0d-f9e8d7c6b5a4"),
+                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(548),
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            Id = new Guid("f1e2d3c4-b5a6-6c7d-8e9f-0a1b2c3d4e5f"),
+                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(550),
+                            Name = "Cashier"
+                        },
+                        new
+                        {
+                            Id = new Guid("7f6e5d4c-3b2a-1f0e-9d8c-2b1a0f9e8d7c"),
+                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(551),
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.Fund", b =>

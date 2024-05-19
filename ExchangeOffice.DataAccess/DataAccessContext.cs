@@ -1,4 +1,5 @@
 ﻿using ExchangeOffice.DataAccess.DAO;
+using ExchangeOffice.DataAccess.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeOffice.DataAccess {
@@ -48,9 +49,6 @@ namespace ExchangeOffice.DataAccess {
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<User>()
-				.Property(r => r.RoleId)
-				.IsRequired(false);
-			modelBuilder.Entity<User>()
 				.Property(r => r.ContactId)
 				.IsRequired(false);
 			
@@ -77,6 +75,9 @@ namespace ExchangeOffice.DataAccess {
 				.WithMany()
 				.HasForeignKey(r => r.RateId)
 				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<UserRole>()
+				.HasData(InitialDataExtension.GetUserRoles());
 		}
 	}
 }

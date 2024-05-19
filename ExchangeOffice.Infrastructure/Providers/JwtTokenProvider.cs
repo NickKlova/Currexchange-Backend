@@ -14,7 +14,9 @@ namespace ExchangeOffice.Infrastructure.Providers {
 		public static string GenerateToken(string username, string role) {
 			List<Claim> claims = new List<Claim> {
 				new Claim(ClaimTypes.Name, username),
-				new Claim(ClaimTypes.Role, "Admin"),
+				new Claim(ClaimTypes.Role, "Owner"),
+				new Claim(ClaimTypes.Role, "Manager"),
+				new Claim(ClaimTypes.Role, "Cashier"),
 				new Claim(ClaimTypes.Role, "User"),
 			};
 

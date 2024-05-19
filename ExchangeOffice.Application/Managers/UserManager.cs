@@ -10,17 +10,20 @@ namespace ExchangeOffice.Application.Managers {
 			_service = service;
 		}
 
-		public async Task<string> LoginAsync(string login, string password) {
+		public async Task<AuthUserDto> LoginAsync(string login, string password) {
 			var user = await _service.GetUserAsync(login);
 			if (user == null) {
-				return await Task.FromResult("");
+				throw new Exception("Not found");
 			}
 
 			var isPassValid = JwtTokenProvider.VerifyPassword(password, user.PasswordHash);
 			if(!isPassValid) {
-				return await Task.FromResult("");
+				throw new Exception("Pass not valid");
 			}
-			return await Task.FromResult(JwtTokenProvider.GenerateToken(login, "Admin"));
+			var authUser = new AuthUserDto();
+			authUser.User = user;
+			authUser.Token = JwtTokenProvider.GenerateToken(login, user.Role.Name);
+			return await Task.FromResult(authUser);
 		}
 
 		public async Task RegisterAsync(InsertUserDto data) {

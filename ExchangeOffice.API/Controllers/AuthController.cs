@@ -13,14 +13,8 @@ namespace ExchangeOffice.API.Controllers {
 
 		[HttpPost("login")]
 		public async Task<IActionResult> Login(string login, string password) {
-			var token = await _manager.LoginAsync(login, password);
-			if (token == "") {
-				return Forbid();
-			}
-			return Ok(new {
-				accessToken = token,
-				role = "Admin",
-			});
+			var data = await _manager.LoginAsync(login, password);
+			return Ok(data);
 		}
 
 		[HttpPost("register")]

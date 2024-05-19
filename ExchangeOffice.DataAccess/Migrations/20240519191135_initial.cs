@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ExchangeOffice.DataAccess.Migrations
 {
     /// <inheritdoc />
@@ -36,9 +38,9 @@ namespace ExchangeOffice.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Code = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Symbol = table.Column<string>(type: "text", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Symbol = table.Column<string>(type: "text", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -51,8 +53,8 @@ namespace ExchangeOffice.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedOn = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,6 +207,17 @@ namespace ExchangeOffice.DataAccess.Migrations
                         principalTable: "Reservations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserRoles",
+                columns: new[] { "Id", "CreatedOn", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("7f6e5d4c-3b2a-1f0e-9d8c-2b1a0f9e8d7c"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(551), "User" },
+                    { new Guid("a9b8c7d6-5e4f-3a2b-1c0d-f9e8d7c6b5a4"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(548), "Manager" },
+                    { new Guid("d2e6fa3f-4d4c-4e5f-9f15-90c8fea98721"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(544), "Owner" },
+                    { new Guid("f1e2d3c4-b5a6-6c7d-8e9f-0a1b2c3d4e5f"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(550), "Cashier" }
                 });
 
             migrationBuilder.CreateIndex(

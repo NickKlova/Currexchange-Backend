@@ -13,15 +13,22 @@ namespace ExchangeOffice.Application.DTO {
 		public string Login { get; set; }
 		public string PasswordHash { get; set; }
 		public UserRoleDto? Role { get; set; }
-		public ContactDto Contact { get; set; }
+		public ContactDto? Contact { get; set; }
 		public bool IsActive { get; set; }
 	}
 
-    public class  InsertUserDto {
+	public class InsertUserDto {
 		public string Login { get; set; }
 		[JsonPropertyName("password")]
 		public string PasswordHash { get; set; }
 		public Guid? RoleId { get; set; } = null;
 		public Guid? ContactId { get; set; } = null;
+	}
+
+	public class AuthUserDto {
+		public UserDto User { get; set; }
+		public string Token {
+			get; set;
+		}
 	}
 }

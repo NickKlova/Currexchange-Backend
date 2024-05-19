@@ -13,6 +13,8 @@ namespace ExchangeOffice.DataAccess.Repositories {
 
 		public async Task<User> GetUserAsync(string login) {
 			var entity = await _context.Users
+				.Include(x=>x.Contact)
+				.Include(x=>x.Role)
 				.Where(x=>x.Login == login && x.IsActive == true)
 				.FirstOrDefaultAsync();
 			if (entity == null) {

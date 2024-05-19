@@ -13,12 +13,13 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
+		[Authorize(Roles = "Owner, Manager, Cashier, User")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<CurrencyDto>> GetCurrenciesAsync() {
 			return await _manager.GetCurrenciesAsync();
 		}
 
-		//[Authorize(Roles = "Admin")]
+		[Authorize(Roles = "Owner, Manager, Cashier, User")]
 		[HttpGet("get")]
 		public async Task<CurrencyDto> GetCurrencyAsync(Guid id) {
 			return await _manager.GetCurrencyAsync(id);
