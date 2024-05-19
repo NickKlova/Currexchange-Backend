@@ -14,12 +14,12 @@ namespace ExchangeOffice.Application.Services {
 			_mapper = mapper;
 		}
 
-		public async Task<FundDto> GetFundByIdAsync(Guid id) {
-			var dao = await _repo.GetFundByIdAsync(id);
+		public async Task<FundDto> GetFundAsync(Guid id) {
+			var dao = await _repo.GetFundAsync(id);
 			var dto = _mapper.Map<FundDto>(dao);
 			return dto;
 		}
-		public async Task<FundDto> GetFundAsync(Guid currencyId) {
+		public async Task<FundDto> GetFundByCurrencyIdAsync(Guid currencyId) {
 			var dao = await _repo.GetFundAsync(currencyId);
 			var dto = _mapper.Map<FundDto>(dao);
 			return dto;
@@ -35,15 +35,15 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<FundDto>(resultDao);
 			return dto;
 		}
-		public async Task<FundDto> UpdateFundAsync(Guid currencyId, decimal amount) {
-			var dao = await _repo.UpdateFundAsync(currencyId, amount);
+		public async Task<FundDto> UpdateFundByCurrencyIdAsync(Guid currencyId, decimal amount) {
+			var dao = await _repo.UpdateFundByCurrencyIdAsync(currencyId, amount);
 			var dto = _mapper.Map<FundDto>(dao);
 			return dto;
 		}
-		public async Task<FundDto> UpdateFundByIdAsync(Guid id, InsertFundDto entity) {
+		public async Task<FundDto> UpdateFundAsync(Guid id, InsertFundDto entity) {
 			var dao = _mapper.Map<Fund>(entity);
 			dao.Id = id;
-			var resultDao = await _repo.UpdateFundByIdAsync(dao);
+			var resultDao = await _repo.UpdateFundAsync(dao);
 			var dto = _mapper.Map<FundDto>(resultDao);
 			return dto;
 		}

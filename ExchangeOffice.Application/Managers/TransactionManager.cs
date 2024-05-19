@@ -41,7 +41,7 @@ namespace ExchangeOffice.Application.Managers {
 		}
 
 		private async Task UpdateFundAsync(Guid currencyId, decimal amount) {
-			await _fundManager.UpdateFundAsync(currencyId, amount);
+			await _fundManager.UpdateFundByCurrencyIdAsync(currencyId, amount);
 		}
 
 		public async Task<TransactionDto> DeleteTransactionAsync(Guid id) {

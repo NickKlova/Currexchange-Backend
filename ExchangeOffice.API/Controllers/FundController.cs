@@ -16,14 +16,14 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.GetFundsAsync();
 		}
 
-		[HttpGet("get")]
-		public async Task<FundDto> GetFundAsync(Guid currencyId) {
-			return await _manager.GetFundAsync(currencyId);
+		[HttpGet("get/bycurrency/{currencyId}")]
+		public async Task<FundDto> GetFundByCurrencyIdAsync(Guid currencyId) {
+			return await _manager.GetFundByCurrencyIdAsync(currencyId);
 		}
 
-		[HttpGet("getById")]
-		public async Task<FundDto> GetFundByIdAsync(Guid id) {
-			return await _manager.GetFundByIdAsync(id);
+		[HttpGet("get/{id}")]
+		public async Task<FundDto> GetFundAsync(Guid id) {
+			return await _manager.GetFundAsync(id);
 		}
 
 		[HttpPost("create")]
@@ -31,17 +31,17 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.AddFundAsync(data);
 		}
 
-		[HttpPatch("update")]
-		public async Task<FundDto> UpdateFundAsync(Guid currencyId, decimal amount) {
-			return await _manager.UpdateFundAsync(currencyId, amount);
+		[HttpPatch("update/bycurrency/{currencyId}")]
+		public async Task<FundDto> UpdateFundByCurrencyIdAsync(Guid currencyId, decimal amount) {
+			return await _manager.UpdateFundByCurrencyIdAsync(currencyId, amount);
 		}
 
-		[HttpPatch("updateById")]
-		public async Task<FundDto> UpdateFundByIdAsync(Guid id, InsertFundDto data) {
-			return await _manager.UpdateFundByIdAsync(id, data);
+		[HttpPatch("update/{id}")]
+		public async Task<FundDto> UpdateFundAsync(Guid id, InsertFundDto data) {
+			return await _manager.UpdateFundAsync(id, data);
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("delete/{id}")]
 		public async Task<FundDto> DeleteFundAsync(Guid id) {
 			return await _manager.DeleteFundAsync(id);
 		}
