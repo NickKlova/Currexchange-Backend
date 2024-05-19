@@ -1,4 +1,5 @@
-﻿using ExchangeOffice.Common.Exceptions;
+﻿using AutoMapper;
+using ExchangeOffice.Common.Exceptions;
 using ExchangeOffice.DataAccess.DAO;
 using ExchangeOffice.DataAccess.Repositories.Abstractions;
 using ExchangeOffice.DataAccess.Repositories.Interfaces;
@@ -7,8 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class TransactionRepository : BaseRepository, ITransactionRepository {
 		private DataAccessContext _context;
-		public TransactionRepository(DataAccessContext context) {
+		private IMapper _mapper;
+		public TransactionRepository(DataAccessContext context, IMapper mapper) {
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<IEnumerable<Transaction>> GetTransactionsAsync() {
@@ -16,6 +19,8 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Where(x=>x.IsActive == true)
 				.Include(x=>x.Contact)
 				.Include(x=>x.Rate)
+				.Include(x=>x.Rate.TargetCurrency)
+				.Include(x=>x.Rate.BaseCurrency)
 				.AsNoTracking());
 		}
 		public async Task<Transaction> CreateTransactionAsync(Transaction entity) {
@@ -25,18 +30,21 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			return entity;
 		}
 		public async Task<Transaction> UpdateTransactionAsync(Transaction entity) {
-			var oldEntity = await _context.Transactions.FindAsync(entity.Id);
-			if(oldEntity == null || entity.IsActive == false) {
+			var oldEntity = await _context.Transactions
+				.Where(x=>x.Id == entity.Id && x.IsActive == true)
+				.FirstOrDefaultAsync();
+			if(oldEntity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Transaction with such id didn't found");
 			}
-			SetDeleteDefaultValues(oldEntity);
+			_mapper.Map(entity, oldEntity);
 			await _context.SaveChangesAsync();
-			var modifiedEntity = await CreateTransactionAsync(entity);
-			return modifiedEntity;
+			return oldEntity;
 		}
 		public async Task<Transaction> DeleteTransactionAsync(Guid id) {
-			var entity = await _context.Transactions.FindAsync(id);
-			if (entity == null || entity.IsActive == false) {
+			var entity = await _context.Transactions
+				.Where(x=>x.Id == id && x.IsActive == true)
+				.FirstOrDefaultAsync();
+			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Transaction with such id didn't found");
 			}
 			SetDeleteDefaultValues(entity);
