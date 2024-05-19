@@ -1,5 +1,6 @@
 ﻿using ExchangeOffice.Application.DTO;
 using ExchangeOffice.Application.Managers.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeOffice.API.Controllers {
@@ -22,11 +23,13 @@ namespace ExchangeOffice.API.Controllers {
 			await _manager.RegisterAsync(data);
 		}
 
+		[Authorize(Roles = "Owner")]
 		[HttpPut("changerole")]
 		public async Task ChangeRole(string login, Guid roleId) {
 			await _manager.ChangeUserRoleAsync(login, roleId);
 		}
 
+		[Authorize(Roles = "Owner")]
 		[HttpDelete("deactivate")]
 		public async Task DeactivateUser(string login) {
 			await _manager.DeactivateUserAsync(login);

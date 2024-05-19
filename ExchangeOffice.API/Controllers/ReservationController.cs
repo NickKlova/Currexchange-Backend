@@ -1,5 +1,6 @@
 ﻿using ExchangeOffice.Application.DTO;
 using ExchangeOffice.Application.Managers.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeOffice.API.Controllers {
@@ -26,6 +27,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.UpdateReservationAsync(id, data);
 		}
 
+		[Authorize(Roles = "Owner, Manager, Cashier, User")]
 		[HttpPost("create")]
 		public async Task<ReservationDto> CreateReservationAsync(InsertReservationDto data) {
 			return await _manager.AddReservationAsync(data);

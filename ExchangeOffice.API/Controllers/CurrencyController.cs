@@ -25,16 +25,19 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.GetCurrencyAsync(id);
 		}
 
+		[Authorize(Roles = "Owner, Manager")]
 		[HttpPost("create")]
 		public async Task<CurrencyDto> CreateCurrencyAsync(InsertCurrencyDto data) {
 			return await _manager.AddCurrencyAsync(data);
 		}
 
+		[Authorize(Roles = "Owner, Manager")]
 		[HttpPut("update")]
 		public async Task<CurrencyDto> UpdateCurrencyAsync(Guid id, [FromBody]InsertCurrencyDto data) {
 			return await _manager.UpdateCurrencyAsync(id, data);
 		}
 
+		[Authorize(Roles = "Owner, Manager")]
 		[HttpDelete("delete")]
 		public async Task<CurrencyDto> DeleteCurrencyAsync(Guid id) {
 			return await _manager.DeleteCurrencyAsync(id);

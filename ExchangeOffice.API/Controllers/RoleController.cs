@@ -1,5 +1,6 @@
 ﻿using ExchangeOffice.Application.DTO;
 using ExchangeOffice.Application.Managers.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExchangeOffice.API.Controllers {
@@ -11,6 +12,7 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
+		[Authorize(Roles = "Owner")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<UserRoleDto>> GetRoles() {
 			return await _manager.GetRolesAsync();
