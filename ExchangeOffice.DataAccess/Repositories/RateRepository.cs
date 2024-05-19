@@ -1,4 +1,5 @@
-﻿using ExchangeOffice.Common.Exceptions;
+﻿using AutoMapper;
+using ExchangeOffice.Common.Exceptions;
 using ExchangeOffice.DataAccess.DAO;
 using ExchangeOffice.DataAccess.Repositories.Abstractions;
 using ExchangeOffice.DataAccess.Repositories.Interfaces;
@@ -7,8 +8,10 @@ using Microsoft.EntityFrameworkCore;
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class RateRepository : BaseRepository, IRateRepository {
 		private readonly DataAccessContext _context;
-		public RateRepository(DataAccessContext context) {
+		private readonly IMapper _mapper;
+		public RateRepository(DataAccessContext context, IMapper mapper) {
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<IEnumerable<Rate>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
@@ -16,9 +19,6 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Include(x => x.TargetCurrency)
 				.Include(x => x.BaseCurrency)
 				.Where(x => x.IsActive == true && x.TargetCurrencyId == targetCurrencyId));
-			if (rates.Count() == 0) {
-				throw new RecordNotFoundException(404, "DataAccess", "Rate with such target currencies id not found");
-			}
 			return rates;
 		}
 
@@ -27,9 +27,6 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Include(x => x.TargetCurrency)
 				.Include(x => x.BaseCurrency)
 				.Where(x => x.IsActive == true && x.BaseCurrencyId == baseCurrencyId));
-			if (rates.Count() == 0) {
-				throw new RecordNotFoundException(404, "DataAccess", "Rate with such base currencies id not found");
-			}
 			return rates;
 		}
 
@@ -40,43 +37,28 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Where(x => x.IsActive == true)
 				.AsNoTracking());
 		}
-		public async Task<Rate> GetRateByIdAsync(Guid id) {
+		public async Task<Rate> GetRateAsync(Guid id) {
 			var entity = await _context.Rates
 				.Include(x => x.BaseCurrency)
 				.Include(x => x.TargetCurrency)
 				.Where(x => x.Id == id && x.IsActive == true)
 				.FirstOrDefaultAsync();
-			if (entity == null || entity.IsActive == false) {
+			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such id not found");
 			}
 			return entity;
 		}
-		public async Task<Rate> GetRateAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
+		public async Task<Rate> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
 			var entity = await _context.Rates.Where(x => x.BaseCurrencyId == baseCurrencyId
 			&& x.TargetCurrencyId == targetCurrencyId
 			&& x.IsActive == true).FirstOrDefaultAsync();
-
 			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such base and target currencies id not found");
 			}
-
 			return entity;
 		}
 		public async Task<Rate> AddRateAsync(Rate entity) {
 			SetDefaultValues(entity);
-			var baseCurrency = await _context.Currencies.FindAsync(entity.BaseCurrencyId);
-			if (baseCurrency == null || entity.IsActive == false) {
-				throw new RecordNotFoundException(404, "DataAccess", "Base currency with such id not found in database, so entity didn't created");
-			}
-
-			var targetCurrency = await _context.Currencies.FindAsync(entity.TargetCurrencyId);
-			if (targetCurrency == null || entity.IsActive == false) {
-				throw new RecordNotFoundException(404, "DataAccess", "Target currency with such id not found in database, so entity didn't created");
-			}
-
-			entity.BaseCurrency = baseCurrency;
-			entity.TargetCurrency = targetCurrency;
-
 			await _context.Rates.AddAsync(entity);
 			await _context.SaveChangesAsync();
 			return entity;
@@ -87,14 +69,10 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Include(x=>x.TargetCurrency)
 				.Where(x=>x.Id == entity.Id && x.IsActive == true)
 				.FirstOrDefaultAsync();
-			if (oldEntity == null || oldEntity.IsActive == false) {
+			if (oldEntity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such id not found");
 			}
-			entity.Id = oldEntity.Id;
-			entity.ModifiedOn = DateTime.UtcNow;
-			entity.IsActive = true;
-			_context.Rates.Remove(oldEntity);
-			await _context.Rates.AddAsync(entity);
+			_mapper.Map(entity, oldEntity);
 			await _context.SaveChangesAsync();
 			return entity;
 		}
@@ -104,7 +82,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Include(x => x.TargetCurrency)
 				.Where(x => x.Id == id && x.IsActive == true)
 				.FirstOrDefaultAsync();
-			if (entity == null || entity.IsActive == false) {
+			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "A rate with such id was not found in the database");
 			}
 			SetDeleteDefaultValues(entity);

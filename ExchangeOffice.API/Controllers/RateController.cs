@@ -11,12 +11,12 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
-		[HttpGet("getallByTargetCurrencyId")]
+		[HttpGet("getall/bytargetcurrency/{targetCurrencyId}")]
 		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
 			return await _manager.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
 		}
 
-		[HttpGet("getallByBaseCurrencyId")]
+		[HttpGet("getall/bybasecurrency/{baseCurrencyId}")]
 		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
 			return await _manager.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
 		}
@@ -26,14 +26,14 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.GetRatesAsync();
 		}
 
-		[HttpGet("get")]
-		public async Task<RateDto> GetRateAsync(Guid baseCurrency, Guid targetCurrency) {
-			return await _manager.GetRateAsync(baseCurrency, targetCurrency);
+		[HttpGet("get/bycurrencies")]
+		public async Task<RateDto> GetRateByCurrenciesAsync(Guid baseCurrency, Guid targetCurrency) {
+			return await _manager.GetRateByCurrenciesAsync(baseCurrency, targetCurrency);
 		}
 
-		[HttpGet("getById")]
-		public async Task<RateDto> GetRateByIdAsync(Guid id) {
-			return await _manager.GetRateByIdAsync(id);
+		[HttpGet("get")]
+		public async Task<RateDto> GetRateAsync(Guid id) {
+			return await _manager.GetRateAsync(id);
 		}
 
 		[HttpPost("create")]
@@ -46,7 +46,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.UpdateRateAsync(id, data);
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("delete/{id}")]
 		public async Task<RateDto> DeleteRateAsync(Guid id) {
 			return await _manager.DeleteRateAsync(id);
 		}

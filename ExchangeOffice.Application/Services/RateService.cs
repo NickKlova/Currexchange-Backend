@@ -29,13 +29,13 @@ namespace ExchangeOffice.Application.Services {
 			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
 			return dtos;
 		}
-		public async Task<RateDto> GetRateByIdAsync(Guid id) {
-			var dao = await _repo.GetRateByIdAsync(id);
+		public async Task<RateDto> GetRateAsync(Guid id) {
+			var dao = await _repo.GetRateAsync(id);
 			var dto = _mapper.Map<RateDto>(dao);
 			return dto;
 		}
-		public async Task<RateDto> GetRateAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
-			var dao = await _repo.GetRateAsync(baseCurrencyId, targetCurrencyId);
+		public async Task<RateDto> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
+			var dao = await _repo.GetRateByCurrenciesAsync(baseCurrencyId, targetCurrencyId);
 			var dto = _mapper.Map<RateDto>(dao);
 			return dto;
 		}

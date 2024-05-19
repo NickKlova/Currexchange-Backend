@@ -18,11 +18,11 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			return await _service.GetRatesAsync();
 		}
-		public async Task<RateDto> GetRateByIdAsync(Guid id) {
-			return await _service.GetRateByIdAsync(id);
+		public async Task<RateDto> GetRateAsync(Guid id) {
+			return await _service.GetRateAsync(id);
 		}
-		public async Task<RateDto> GetRateAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
-			return await _service.GetRateAsync(baseCurrencyId, targetCurrencyId);
+		public async Task<RateDto> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
+			return await _service.GetRateByCurrenciesAsync(baseCurrencyId, targetCurrencyId);
 		}
 		public async Task<RateDto> AddRateAsync(InsertRateDto entity) {
 			return await _service.AddRateAsync(entity);
