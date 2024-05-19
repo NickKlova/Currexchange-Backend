@@ -1,4 +1,5 @@
-﻿using ExchangeOffice.Common.Exceptions;
+﻿using AutoMapper;
+using ExchangeOffice.Common.Exceptions;
 using ExchangeOffice.DataAccess.DAO;
 using ExchangeOffice.DataAccess.Repositories.Abstractions;
 using ExchangeOffice.DataAccess.Repositories.Interfaces;
@@ -8,8 +9,10 @@ using System.Data;
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class ContactRepository : BaseRepository, IContactRepository {
 		private readonly DataAccessContext _context;
-		public ContactRepository(DataAccessContext context) {
+		private readonly IMapper _mapper;
+		public ContactRepository(DataAccessContext context, IMapper mapper) {
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<IEnumerable<Contact>> GetContactsAsync() {
@@ -33,11 +36,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			if (oldEntity == null || oldEntity.IsActive == false) {
 				throw new RecordNotFoundException(404, "DataAccess", "Contact with such id not found");
 			}
-			entity.Id = oldEntity.Id;
-			entity.ModifiedOn = DateTime.UtcNow;
-			entity.IsActive = true;
-			_context.Contacts.Remove(oldEntity);
-			await _context.AddAsync(entity);
+			_mapper.Map(entity, oldEntity);
 			await _context.SaveChangesAsync();
 			return entity;
 		}
@@ -52,7 +51,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 		}
 		public async Task<Contact> DeleteContactAsync(Guid id) {
 			var entity = await _context.Contacts.FindAsync(id);
-			if (entity == null || entity.IsActive == false) {
+			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Contact with such id not found");
 			}
 			_context.Contacts.Remove(entity);

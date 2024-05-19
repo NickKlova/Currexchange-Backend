@@ -26,12 +26,12 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.AddContactAsync(data);
 		}
 
-		[HttpPatch("update")]
+		[HttpPut("update")]
 		public async Task<ContactDto> UpdateContactAsync(Guid id, [FromBody] InsertContactDto data) {
 			return await _manager.UpdateContactAsync(id, data);
 		}
 
-		[HttpPatch("deactivate")]
+		[HttpDelete("deactivate")]
 		public async Task<ContactDto> DeactivateContactAsync(Guid id) {
 			return await _manager.DeactivateContactAsync(id);
 		}
