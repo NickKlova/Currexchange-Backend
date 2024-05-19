@@ -25,15 +25,15 @@ namespace ExchangeOffice.Application.Services {
 		}
 		public async Task<CurrencyDto> AddCurrencyAsync(InsertCurrencyDto dto) {
 			var dao = _mapper.Map<Currency>(dto);
-			var result = await _repo.AddCurrencyAsync(dao);
-			var dto2 = _mapper.Map<CurrencyDto>(result);
-			return dto2;
+			var resultDao = await _repo.AddCurrencyAsync(dao);
+			var resultDto = _mapper.Map<CurrencyDto>(resultDao);
+			return resultDto;
 		}
 		public async Task<CurrencyDto> UpdateCurrencyAsync(Guid id, InsertCurrencyDto entity) {
 			var dao = _mapper.Map<Currency>(entity);
 			dao.Id = id;
-			var dao1 = await _repo.UpdateCurrencyAsync(dao);
-			var dto = _mapper.Map<CurrencyDto>(dao1);
+			var resultDao = await _repo.UpdateCurrencyAsync(dao);
+			var dto = _mapper.Map<CurrencyDto>(resultDao);
 			return dto;
 		}
 		public async Task<CurrencyDto> DeleteCurrencyAsync(Guid id) {

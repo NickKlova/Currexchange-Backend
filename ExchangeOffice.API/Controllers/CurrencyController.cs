@@ -29,7 +29,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.AddCurrencyAsync(data);
 		}
 
-		[HttpPatch("update")]
+		[HttpPut("update")]
 		public async Task<CurrencyDto> UpdateCurrencyAsync(Guid id, [FromBody]InsertCurrencyDto data) {
 			return await _manager.UpdateCurrencyAsync(id, data);
 		}
