@@ -24,7 +24,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			return await _manager.GetRatesAsync();

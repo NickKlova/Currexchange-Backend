@@ -12,19 +12,19 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<ContactDto>> GetContactsAsync() {
 			return await _manager.GetContactsAsync();
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpGet("get")]
 		public async Task<ContactDto> GetContactAsync(Guid id) {
 			return await _manager.GetContactAsync(id);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpPost("create")]
 		public async Task<ContactDto> CreateContactAsync(InsertContactDto data) {
 			return await _manager.AddContactAsync(data);
