@@ -3,12 +3,14 @@ using ExchangeOffice.Application.Managers;
 using ExchangeOffice.Application.Managers.Interfaces;
 using ExchangeOffice.Application.Services;
 using ExchangeOffice.Application.Services.Interfaces;
+using ExchangeOffice.Integration.BankGov.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExchangeOffice.Application.Extensions {
 	public static class ApplicationExtensions {
 		public static void AddApplicationLayer(this IServiceCollection services) {
 			services.AddDataAccessLayer();
+			services.AddBankGovLayer();
 			services.AddAutoMapper(typeof(AutoMapperProfile));
 			services.AddSingleton<ICurrencyService, CurrencyService>();
 			services.AddSingleton<ICurrencyManager, CurrencyManager>();

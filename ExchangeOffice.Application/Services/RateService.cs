@@ -57,5 +57,17 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<RateDto>(dao);
 			return dto;
 		}
+		public async Task<IEnumerable<RateDto>> GetDeletedRates() {
+			var daos = await _repo.GetDeletedRates();
+			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
+			return dtos;
+		}
+		public async Task<RateDto> ActivateDeletedRateAsync(Guid id, InsertRateDto entity) {
+			var dao = _mapper.Map<Rate>(entity);
+			dao.Id = id;
+			var daoResult = await _repo.ActivateDeletedRateAsync(dao);
+			var dto = _mapper.Map<RateDto>(daoResult);
+			return dto;
+		}
 	}
 }

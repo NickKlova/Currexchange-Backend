@@ -29,5 +29,12 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<FundDto> DeleteFundAsync(Guid id) {
 			return await _service.DeleteFundAsync(id);
 		}
+		public async Task<IEnumerable<FundDto>> GetDeletedFundsAsync() {
+			return await _service.GetDeletedFundsAsync();
+		}
+
+		public async Task<FundDto> ActivateDeletedFundAsync(Guid id, InsertFundDto entity) {
+			return await _service.ActivateDeletedFundAsync(id, entity);
+		}
 	}
 }

@@ -19,19 +19,19 @@ namespace ExchangeOffice.Application.Managers {
 		}
 
 		public async Task<TransactionDto> CreateTransactionAsync(InsertTransactionDto transaction) {
-			var baseCurrencyAmount = transaction.Amount;
-			var rate = await GetCurrentRateAsync(transaction.RateId);
-			decimal targetAmount;
-			if (transaction.IsSale) {
-				targetAmount = -(rate.SellRate * baseCurrencyAmount);
-				await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
-				await UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
-				return await _service.CreateTransactionAsync(transaction);
-			}
+			//var baseCurrencyAmount = transaction.Amount;
+			//var rate = await GetCurrentRateAsync(transaction.RateId);
+			//decimal targetAmount;
+			//if (transaction.IsSale) {
+			//	targetAmount = -(rate.SellRate * baseCurrencyAmount);
+			//	await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
+			//	await UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
+			//	return await _service.CreateTransactionAsync(transaction);
+			//}
 
-			targetAmount = rate.BuyRate * baseCurrencyAmount;
-			await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
-			await UpdateFundAsync(rate.BaseCurrency.Id, -baseCurrencyAmount);
+			//targetAmount = rate.BuyRate * baseCurrencyAmount;
+			//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
+			//await UpdateFundAsync(rate.BaseCurrency.Id, -baseCurrencyAmount);
 			return await _service.CreateTransactionAsync(transaction);
 		}
 
@@ -58,14 +58,14 @@ namespace ExchangeOffice.Application.Managers {
 			decimal targetAmount;
 			if (transaction.IsSale) {
 				targetAmount = -(rate.SellRate * baseCurrencyAmount);
-				await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
-				await UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
+				//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
+				//wait UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
 				return await _service.UpdateTransactionAsync(id, transaction);
 			}
 
 			targetAmount = rate.BuyRate * baseCurrencyAmount;
-			await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
-			await UpdateFundAsync(rate.BaseCurrency.Id, -baseCurrencyAmount);
+			//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
+			//await UpdateFundAsync(rate.BaseCurrency.Id, -baseCurrencyAmount);
 			return await _service.UpdateTransactionAsync(id, transaction);
 		}
 	}

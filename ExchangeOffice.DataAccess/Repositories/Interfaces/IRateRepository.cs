@@ -1,4 +1,5 @@
 ﻿using ExchangeOffice.DataAccess.DAO;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeOffice.DataAccess.Repositories.Interfaces {
 	public interface IRateRepository {
@@ -10,5 +11,7 @@ namespace ExchangeOffice.DataAccess.Repositories.Interfaces {
 		public Task<Rate> AddRateAsync(Rate entity);
 		public Task<Rate> UpdateRateAsync(Rate entity);
 		public Task<Rate> DeleteRateAsync(Guid id);
+		public Task<IEnumerable<Rate>> GetDeletedRates();
+		public Task<Rate> ActivateDeletedRateAsync(Rate entity);
 	}
 }

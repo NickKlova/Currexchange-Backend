@@ -27,7 +27,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.UpdateReservationAsync(id, data);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier, User")]
+		//[Authorize(Roles = "Owner, Manager, Cashier, User")]
 		[HttpPost("create")]
 		public async Task<ReservationDto> CreateReservationAsync(InsertReservationDto data) {
 			return await _manager.AddReservationAsync(data);

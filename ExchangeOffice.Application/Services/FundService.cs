@@ -20,7 +20,7 @@ namespace ExchangeOffice.Application.Services {
 			return dto;
 		}
 		public async Task<FundDto> GetFundByCurrencyIdAsync(Guid currencyId) {
-			var dao = await _repo.GetFundAsync(currencyId);
+			var dao = await _repo.GetFundByCurrencyIdAsync(currencyId);
 			var dto = _mapper.Map<FundDto>(dao);
 			return dto;
 		}
@@ -50,6 +50,19 @@ namespace ExchangeOffice.Application.Services {
 		public async Task<FundDto> DeleteFundAsync(Guid id) {
 			var dao = await _repo.DeleteFundAsync(id);
 			var dto = _mapper.Map<FundDto>(dao);
+			return dto;
+		}
+		public async Task<IEnumerable<FundDto>> GetDeletedFundsAsync() {
+			var daos = await _repo.GetDeletedFundsAsync();
+			var dtos = _mapper.Map<IEnumerable<FundDto>>(daos);
+			return dtos;
+		}
+
+		public async Task<FundDto> ActivateDeletedFundAsync(Guid id, InsertFundDto entity) {
+			var dao = _mapper.Map<Fund>(entity);
+			dao.Id = id;
+			var resultDao = await _repo.ActivateDeletedFundAsync(dao);
+			var dto = _mapper.Map<FundDto>(resultDao);
 			return dto;
 		}
 	}

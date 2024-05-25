@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ExchangeOffice.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BankGovId = table.Column<string>(type: "text", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Code = table.Column<string>(type: "text", nullable: true),
@@ -90,8 +91,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    BaseCurrencyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TargetCurrencyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrencyId = table.Column<Guid>(type: "uuid", nullable: false),
                     SellRate = table.Column<decimal>(type: "numeric", nullable: false),
                     BuyRate = table.Column<decimal>(type: "numeric", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
@@ -100,14 +100,8 @@ namespace ExchangeOffice.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Rates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Rates_Currencies_BaseCurrencyId",
-                        column: x => x.BaseCurrencyId,
-                        principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Rates_Currencies_TargetCurrencyId",
-                        column: x => x.TargetCurrencyId,
+                        name: "FK_Rates_Currencies_CurrencyId",
+                        column: x => x.CurrencyId,
                         principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -183,7 +177,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                     RateId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsSale = table.Column<bool>(type: "boolean", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    ReservationId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReservationId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -205,20 +199,35 @@ namespace ExchangeOffice.DataAccess.Migrations
                         name: "FK_Transactions_Reservations_ReservationId",
                         column: x => x.ReservationId,
                         principalTable: "Reservations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Currencies",
+                columns: new[] { "Id", "BankGovId", "Code", "CreatedOn", "Description", "IsActive", "ModifiedOn", "Symbol" },
+                values: new object[] { new Guid("a3b1c2d3-4e5f-6789-abcd-ef0123456789"), null, "UAH", new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7215), "Українська гривня", true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "₴" });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
                 columns: new[] { "Id", "CreatedOn", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("7f6e5d4c-3b2a-1f0e-9d8c-2b1a0f9e8d7c"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(551), "User" },
-                    { new Guid("a9b8c7d6-5e4f-3a2b-1c0d-f9e8d7c6b5a4"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(548), "Manager" },
-                    { new Guid("d2e6fa3f-4d4c-4e5f-9f15-90c8fea98721"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(544), "Owner" },
-                    { new Guid("f1e2d3c4-b5a6-6c7d-8e9f-0a1b2c3d4e5f"), new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(550), "Cashier" }
+                    { new Guid("7f6e5d4c-3b2a-1f0e-9d8c-2b1a0f9e8d7c"), new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7173), "User" },
+                    { new Guid("a9b8c7d6-5e4f-3a2b-1c0d-f9e8d7c6b5a4"), new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7170), "Manager" },
+                    { new Guid("d2e6fa3f-4d4c-4e5f-9f15-90c8fea98721"), new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7165), "Owner" },
+                    { new Guid("f1e2d3c4-b5a6-6c7d-8e9f-0a1b2c3d4e5f"), new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7172), "Cashier" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Funds",
+                columns: new[] { "Id", "Amount", "CreatedOn", "CurrencyId", "IsActive", "ModifiedOn" },
+                values: new object[] { new Guid("bc0fa8e3-4a15-4d19-ba0b-2ef80ab94c56"), 0m, new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7816), new Guid("a3b1c2d3-4e5f-6789-abcd-ef0123456789"), true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Currencies_BankGovId",
+                table: "Currencies",
+                column: "BankGovId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Funds_CurrencyId",
@@ -226,14 +235,9 @@ namespace ExchangeOffice.DataAccess.Migrations
                 column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rates_BaseCurrencyId",
+                name: "IX_Rates_CurrencyId",
                 table: "Rates",
-                column: "BaseCurrencyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rates_TargetCurrencyId",
-                table: "Rates",
-                column: "TargetCurrencyId");
+                column: "CurrencyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ContactId",

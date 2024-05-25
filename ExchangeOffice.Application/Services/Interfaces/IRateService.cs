@@ -10,5 +10,7 @@ namespace ExchangeOffice.Application.Services.Interfaces {
 		public Task<RateDto> AddRateAsync(InsertRateDto entity);
 		public Task<RateDto> UpdateRateAsync(Guid id, InsertRateDto entity);
 		public Task<RateDto> DeleteRateAsync(Guid id);
+		public Task<IEnumerable<RateDto>> GetDeletedRates();
+		public Task<RateDto> ActivateDeletedRateAsync(Guid id, InsertRateDto entity);
 	}
 }

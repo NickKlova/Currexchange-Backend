@@ -18,9 +18,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			return await Task.FromResult(_context.Reservations
 				.Include(x => x.Contact)
 				.Include(x => x.Rate)
-				.ThenInclude(r => r.TargetCurrency)
-				.Include(x => x.Rate)
-				.ThenInclude(r => r.BaseCurrency)
+				.ThenInclude(r => r.Currency)
 				.Where(x=>x.IsActive)
 				.AsNoTracking());
 
@@ -30,9 +28,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			var entity = await _context.Reservations
 				.Include(x => x.Contact)
 				.Include(x => x.Rate)
-				.ThenInclude(r => r.TargetCurrency)
-				.Include(x => x.Rate)
-				.ThenInclude(r => r.BaseCurrency)
+				.ThenInclude(r => r.Currency)
 				.Where(x => x.Id == id && x.IsActive == true)
 				.AsNoTracking()
 				.FirstOrDefaultAsync();

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ExchangeOffice.DataAccess\ExchangeOffice.DataAccess.csproj" />
     <ProjectReference Include="..\ExchangeOffice.Infrastructure\ExchangeOffice.Infrastructure.csproj" />
+    <ProjectReference Include="..\ExchangeOffice.Integration.BankGovUa\ExchangeOffice.Integration.BankGov.csproj" />
   </ItemGroup>
 
 </Project>

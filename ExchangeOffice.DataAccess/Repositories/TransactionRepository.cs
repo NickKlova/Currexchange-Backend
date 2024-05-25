@@ -19,8 +19,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 				.Where(x=>x.IsActive == true)
 				.Include(x=>x.Contact)
 				.Include(x=>x.Rate)
-				.Include(x=>x.Rate.TargetCurrency)
-				.Include(x=>x.Rate.BaseCurrency)
+				.Include(x=>x.Rate.Currency)
 				.AsNoTracking());
 		}
 		public async Task<Transaction> CreateTransactionAsync(Transaction entity) {

@@ -12,19 +12,19 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<TransactionDto>> GetTransactionsAsync() {
 			return await _manager.GetTransactionsAsync();
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpPost("create")]
 		public async Task<TransactionDto> CreateTransactionAsync(InsertTransactionDto data) {
 			return await _manager.CreateTransactionAsync(data);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpPatch("update")]
 		public async Task<TransactionDto> UpdateTransactionAsync(Guid id, [FromBody] InsertTransactionDto data) {
 			return await _manager.UpdateTransactionAsync(id, data);

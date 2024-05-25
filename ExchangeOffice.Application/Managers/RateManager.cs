@@ -33,5 +33,11 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<RateDto> DeleteRateAsync(Guid id) {
 			return await _service.DeleteRateAsync(id);
 		}
+		public async Task<IEnumerable<RateDto>> GetDeletedRates() {
+			return await _service.GetDeletedRates();
+		}
+		public async Task<RateDto> ActivateDeletedRateAsync(Guid id, InsertRateDto entity) {
+			return await _service.ActivateDeletedRateAsync(id, entity);
+		}
 	}
 }

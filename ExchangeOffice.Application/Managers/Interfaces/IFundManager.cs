@@ -9,5 +9,7 @@ namespace ExchangeOffice.Application.Managers.Interfaces {
 		public Task<FundDto> UpdateFundByCurrencyIdAsync(Guid currencyId, decimal amount);
 		public Task<FundDto> UpdateFundAsync(Guid id, InsertFundDto entity);
 		public Task<FundDto> DeleteFundAsync(Guid id);
+		public Task<IEnumerable<FundDto>> GetDeletedFundsAsync();
+		public Task<FundDto> ActivateDeletedFundAsync(Guid id, InsertFundDto entity);
 	}
 }

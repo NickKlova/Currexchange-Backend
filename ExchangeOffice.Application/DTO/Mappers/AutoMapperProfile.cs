@@ -28,8 +28,9 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 				.ConvertUsing((src, dest, context) => src.Select(x => context.Mapper.Map<RateDto>(x)));
 
 			CreateMap<Rate, RateDto>()
-				.ForMember(dest => dest.BaseCurrency, opt => opt.MapFrom(src => src.BaseCurrency))
-				.ForMember(dest => dest.TargetCurrency, opt => opt.MapFrom(src => src.TargetCurrency));
+				.ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency));
+
+			CreateMap<RateDto, InsertRateDto>();
 
 			CreateMap<InsertRateDto, Rate>();
 		}
@@ -37,6 +38,8 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 		private void CreateFundMappers() {
 			CreateMap<IEnumerable<Fund>, IEnumerable<FundDto>>()
 				.ConvertUsing((src, dest, context) => src.Select(x => context.Mapper.Map<FundDto>(x)));
+
+			CreateMap<FundDto, InsertFundDto>();
 
 			CreateMap<Fund, FundDto>()
 				.ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency));

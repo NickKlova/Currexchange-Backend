@@ -12,7 +12,7 @@ namespace ExchangeOffice.API.Controllers {
 			_manager = manager;
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpGet("getall")]
 		public async Task<IEnumerable<FundDto>> GetFundsAsync() {
 			return await _manager.GetFundsAsync();
@@ -42,7 +42,7 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.UpdateFundByCurrencyIdAsync(currencyId, amount);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpPatch("update/{id}")]
 		public async Task<FundDto> UpdateFundAsync(Guid id, InsertFundDto data) {
 			return await _manager.UpdateFundAsync(id, data);

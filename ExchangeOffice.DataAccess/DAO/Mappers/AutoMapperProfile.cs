@@ -35,8 +35,7 @@ namespace ExchangeOffice.DataAccess.DAO.Mappers {
 		}
 		private void CreateRateMapper() {
 			CreateMap<Rate, Rate>()
-				.ForMember(dest => dest.BaseCurrency, opt => opt.MapFrom(src => src.BaseCurrency))
-				.ForMember(dest => dest.TargetCurrency, opt => opt.MapFrom(src => src.TargetCurrency))
+				.ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency))
 				.ForMember(dest => dest.Id, opt => opt.Ignore())
 				.ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
 				.ForMember(dest => dest.ModifiedOn, opt => opt.MapFrom(src => DateTime.UtcNow))

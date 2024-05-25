@@ -26,5 +26,30 @@ namespace ExchangeOffice.DataAccess.Extensions {
 				}
 			};
 		}
+
+		public static List<Currency> GetCurrencies() {
+			return new List<Currency> {
+				new Currency() {
+					Id = new Guid("A3B1C2D3-4E5F-6789-ABCD-EF0123456789"),
+					Code = "UAH",
+					CreatedOn = DateTime.UtcNow,
+					Description = "Українська гривня",
+					Symbol = "₴",
+					IsActive = true,
+				},
+			};
+		}
+
+		public static List<Fund> GetFunds() {
+			return new List<Fund> {
+				new Fund() { 
+					Id = new Guid("BC0FA8E3-4A15-4D19-BA0B-2EF80AB94C56"),
+					CreatedOn = DateTime.UtcNow,
+					CurrencyId = new Guid("A3B1C2D3-4E5F-6789-ABCD-EF0123456789"),
+					Amount = 0,
+					IsActive = true,
+				}
+			};
+		}
 	}
 }

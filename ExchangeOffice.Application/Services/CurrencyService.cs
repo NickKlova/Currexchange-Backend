@@ -6,15 +6,31 @@ using ExchangeOffice.DataAccess.Repositories.Interfaces;
 
 namespace ExchangeOffice.Application.Services {
 	public class CurrencyService : ICurrencyService {
-		public readonly IMapper _mapper;
-		public readonly ICurrencyRepository _repo;
+		#region Fields: Private
+
+		private readonly IMapper _mapper;
+		private readonly ICurrencyRepository _repo;
+
+		#endregion
+
+		#region Constructors: Public
+
 		public CurrencyService(ICurrencyRepository repo, IMapper mapper) {
 			_repo = repo;
 			_mapper = mapper;
 		}
 
+		#endregion
+
+		#region Methods: Public
+
 		public async Task<IEnumerable<CurrencyDto>> GetCurrenciesAsync() {
 			var daos = await _repo.GetCurrenciesAsync();
+			var dtos = _mapper.Map<IEnumerable<CurrencyDto>>(daos);
+			return dtos;
+		}
+		public async Task<IEnumerable<CurrencyDto>> GetDeletedCurrenciesAsync() {
+			var daos = await _repo.GetDeletedCurrenciesAsync();
 			var dtos = _mapper.Map<IEnumerable<CurrencyDto>>(daos);
 			return dtos;
 		}
@@ -36,10 +52,19 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<CurrencyDto>(resultDao);
 			return dto;
 		}
+		public async Task<CurrencyDto> ActivateCurrencyAsync(Guid id, InsertCurrencyDto entity) {
+			var dao = _mapper.Map<Currency>(entity);
+			dao.Id = id;
+			var resultDao = await _repo.ActivateCurrencyAsync(dao);
+			var dto = _mapper.Map<CurrencyDto>(resultDao);
+			return dto;
+		}
 		public async Task<CurrencyDto> DeleteCurrencyAsync(Guid id) {
 			var dao = await _repo.DeleteCurrencyAsync(id);
 			var dto = _mapper.Map<CurrencyDto>(dao);
 			return dto;
 		}
+
+		#endregion
 	}
 }

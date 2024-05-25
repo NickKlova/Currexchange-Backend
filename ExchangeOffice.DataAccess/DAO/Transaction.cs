@@ -9,8 +9,8 @@
 		public Rate? Rate { get; set; }
 		public bool IsSale { get; set; }
 		public decimal Amount { get; set; }
-		public Guid ReservationId { get; set; }
-		public Reservation Reservation { get; set; }
+		public Guid? ReservationId { get; set; }
+		public Reservation? Reservation { get; set; }
 		public bool IsActive { get; set; }
 	}
 }

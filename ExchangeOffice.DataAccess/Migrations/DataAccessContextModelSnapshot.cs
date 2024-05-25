@@ -60,6 +60,9 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("BankGovId")
+                        .HasColumnType("text");
+
                     b.Property<string>("Code")
                         .HasColumnType("text");
 
@@ -80,7 +83,22 @@ namespace ExchangeOffice.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BankGovId")
+                        .IsUnique();
+
                     b.ToTable("Currencies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a3b1c2d3-4e5f-6789-abcd-ef0123456789"),
+                            Code = "UAH",
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7215),
+                            Description = "Українська гривня",
+                            IsActive = true,
+                            ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Symbol = "₴"
+                        });
                 });
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.Fund", b =>
@@ -109,6 +127,17 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.HasIndex("CurrencyId");
 
                     b.ToTable("Funds");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("bc0fa8e3-4a15-4d19-ba0b-2ef80ab94c56"),
+                            Amount = 0m,
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7816),
+                            CurrencyId = new Guid("a3b1c2d3-4e5f-6789-abcd-ef0123456789"),
+                            IsActive = true,
+                            ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.Rate", b =>
@@ -117,14 +146,14 @@ namespace ExchangeOffice.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BaseCurrencyId")
-                        .HasColumnType("uuid");
-
                     b.Property<decimal>("BuyRate")
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CurrencyId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -135,14 +164,9 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<decimal>("SellRate")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("TargetCurrencyId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("BaseCurrencyId");
-
-                    b.HasIndex("TargetCurrencyId");
+                    b.HasIndex("CurrencyId");
 
                     b.ToTable("Rates");
                 });
@@ -210,7 +234,7 @@ namespace ExchangeOffice.DataAccess.Migrations
                     b.Property<Guid>("RateId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ReservationId")
+                    b.Property<Guid?>("ReservationId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -277,25 +301,25 @@ namespace ExchangeOffice.DataAccess.Migrations
                         new
                         {
                             Id = new Guid("d2e6fa3f-4d4c-4e5f-9f15-90c8fea98721"),
-                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(544),
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7165),
                             Name = "Owner"
                         },
                         new
                         {
                             Id = new Guid("a9b8c7d6-5e4f-3a2b-1c0d-f9e8d7c6b5a4"),
-                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(548),
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7170),
                             Name = "Manager"
                         },
                         new
                         {
                             Id = new Guid("f1e2d3c4-b5a6-6c7d-8e9f-0a1b2c3d4e5f"),
-                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(550),
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7172),
                             Name = "Cashier"
                         },
                         new
                         {
                             Id = new Guid("7f6e5d4c-3b2a-1f0e-9d8c-2b1a0f9e8d7c"),
-                            CreatedOn = new DateTime(2024, 5, 19, 19, 11, 34, 555, DateTimeKind.Utc).AddTicks(551),
+                            CreatedOn = new DateTime(2024, 5, 25, 21, 10, 49, 103, DateTimeKind.Utc).AddTicks(7173),
                             Name = "User"
                         });
                 });
@@ -313,21 +337,13 @@ namespace ExchangeOffice.DataAccess.Migrations
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.Rate", b =>
                 {
-                    b.HasOne("ExchangeOffice.DataAccess.DAO.Currency", "BaseCurrency")
+                    b.HasOne("ExchangeOffice.DataAccess.DAO.Currency", "Currency")
                         .WithMany()
-                        .HasForeignKey("BaseCurrencyId")
+                        .HasForeignKey("CurrencyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ExchangeOffice.DataAccess.DAO.Currency", "TargetCurrency")
-                        .WithMany()
-                        .HasForeignKey("TargetCurrencyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("BaseCurrency");
-
-                    b.Navigation("TargetCurrency");
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("ExchangeOffice.DataAccess.DAO.Reservation", b =>
@@ -365,9 +381,7 @@ namespace ExchangeOffice.DataAccess.Migrations
 
                     b.HasOne("ExchangeOffice.DataAccess.DAO.Reservation", "Reservation")
                         .WithMany()
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ReservationId");
 
                     b.Navigation("Contact");
 

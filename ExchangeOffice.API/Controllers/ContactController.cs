@@ -30,13 +30,13 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.AddContactAsync(data);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpPut("update")]
 		public async Task<ContactDto> UpdateContactAsync(Guid id, [FromBody] InsertContactDto data) {
 			return await _manager.UpdateContactAsync(id, data);
 		}
 
-		[Authorize(Roles = "Owner, Manager, Cashier")]
+		//[Authorize(Roles = "Owner, Manager, Cashier")]
 		[HttpDelete("deactivate")]
 		public async Task<ContactDto> DeactivateContactAsync(Guid id) {
 			return await _manager.DeactivateContactAsync(id);

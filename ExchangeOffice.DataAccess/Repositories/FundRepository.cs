@@ -81,5 +81,24 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			await _context.SaveChangesAsync();
 			return entity;
 		}
+
+		public async Task<IEnumerable<Fund>> GetDeletedFundsAsync() {
+			return await Task.FromResult(_context.Funds
+				.Include(x => x.Currency)
+				.Where(x => x.IsActive == false)
+				.AsNoTracking());
+		}
+
+		public async Task<Fund> ActivateDeletedFundAsync(Fund entity) {
+			var oldEntity = await _context.Funds
+				.Where(x => x.Id == entity.Id && x.IsActive == false)
+				.FirstOrDefaultAsync();
+			if (oldEntity == null) {
+				throw new RecordNotFoundException(404, "DataAccess", "Fund with such id not found");
+			}
+			_mapper.Map(entity, oldEntity);
+			await _context.SaveChangesAsync();
+			return entity;
+		}
 	}
 }

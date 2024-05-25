@@ -17,17 +17,10 @@ namespace ExchangeOffice.DataAccess {
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);
 
-
 			modelBuilder.Entity<Rate>()
-				.HasOne(r => r.BaseCurrency)
+				.HasOne(r => r.Currency)
 				.WithMany()
-				.HasForeignKey(r => r.BaseCurrencyId)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<Rate>()
-				.HasOne(r => r.TargetCurrency)
-				.WithMany()
-				.HasForeignKey(r => r.TargetCurrencyId)
+				.HasForeignKey(r => r.CurrencyId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Fund>()
@@ -78,6 +71,16 @@ namespace ExchangeOffice.DataAccess {
 
 			modelBuilder.Entity<UserRole>()
 				.HasData(InitialDataExtension.GetUserRoles());
+
+			modelBuilder.Entity<Currency>()
+				.HasData(InitialDataExtension.GetCurrencies());
+
+			modelBuilder.Entity<Currency>()
+				.HasIndex(e => e.BankGovId)
+				.IsUnique();
+
+			modelBuilder.Entity<Fund>()
+				.HasData(InitialDataExtension.GetFunds());
 		}
 	}
 }
