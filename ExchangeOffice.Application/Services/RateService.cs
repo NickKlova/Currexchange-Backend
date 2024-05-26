@@ -6,26 +6,31 @@ using ExchangeOffice.DataAccess.Repositories.Interfaces;
 
 namespace ExchangeOffice.Application.Services {
 	public class RateService : IRateService {
+		#region Fields: Private
+
 		private readonly IRateRepository _repo;
 		private readonly IMapper _mapper;
+
+		#endregion
+
+		#region Constructors: Public
 
 		public RateService(IRateRepository repo, IMapper mapper) {
 			_repo = repo;
 			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
-			var daos = await _repo.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
-			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
-			return dtos;
-		}
-		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
-			var daos = await _repo.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
-			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
-			return dtos;
-		}
+		#endregion
+
+		#region Methods: Public
+
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			var daos = await _repo.GetRatesAsync();
+			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
+			return dtos;
+		}
+		public async Task<IEnumerable<RateDto>> GetDeletedRatesAsync() {
+			var daos = await _repo.GetDeletedRatesAsync();
 			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
 			return dtos;
 		}
@@ -34,8 +39,8 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<RateDto>(dao);
 			return dto;
 		}
-		public async Task<RateDto> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
-			var dao = await _repo.GetRateByCurrenciesAsync(baseCurrencyId, targetCurrencyId);
+		public async Task<RateDto> GetRateByCurrencyAsync(Guid currencyId) {
+			var dao = await _repo.GetRateByCurrencyAsync(currencyId);
 			var dto = _mapper.Map<RateDto>(dao);
 			return dto;
 		}
@@ -52,16 +57,6 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<RateDto>(daoResult);
 			return dto;
 		}
-		public async Task<RateDto> DeleteRateAsync(Guid id) {
-			var dao = await _repo.DeleteRateAsync(id);
-			var dto = _mapper.Map<RateDto>(dao);
-			return dto;
-		}
-		public async Task<IEnumerable<RateDto>> GetDeletedRates() {
-			var daos = await _repo.GetDeletedRates();
-			var dtos = _mapper.Map<IEnumerable<RateDto>>(daos);
-			return dtos;
-		}
 		public async Task<RateDto> ActivateDeletedRateAsync(Guid id, InsertRateDto entity) {
 			var dao = _mapper.Map<Rate>(entity);
 			dao.Id = id;
@@ -69,5 +64,12 @@ namespace ExchangeOffice.Application.Services {
 			var dto = _mapper.Map<RateDto>(daoResult);
 			return dto;
 		}
+		public async Task<RateDto> DeleteRateAsync(Guid id) {
+			var dao = await _repo.DeleteRateAsync(id);
+			var dto = _mapper.Map<RateDto>(dao);
+			return dto;
+		}
+
+		#endregion
 	}
 }

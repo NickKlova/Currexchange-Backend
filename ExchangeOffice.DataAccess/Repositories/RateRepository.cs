@@ -7,31 +7,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class RateRepository : BaseRepository, IRateRepository {
+		#region Fields: Private
+
 		private readonly DataAccessContext _context;
 		private readonly IMapper _mapper;
+
+		#endregion
+
+		#region Constructors: Public
+
 		public RateRepository(DataAccessContext context, IMapper mapper) {
 			_context = context;
 			_mapper = mapper;
 		}
 
-		public async Task<IEnumerable<Rate>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
-			var rates = await Task.FromResult(_context.Rates
-				.Include(x => x.Currency)
-				.Where(x => x.IsActive == true && x.CurrencyId == targetCurrencyId));
-			return rates;
-		}
+		#endregion
 
-		public async Task<IEnumerable<Rate>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
-			var rates = await Task.FromResult(_context.Rates
-				.Include(x => x.CurrencyId)
-				.Where(x => x.IsActive == true && x.CurrencyId == baseCurrencyId));
-			return rates;
-		}
+		#region Methods: Public
 
 		public async Task<IEnumerable<Rate>> GetRatesAsync() {
 			return await Task.FromResult(_context.Rates
 				.Include(x => x.Currency)
 				.Where(x => x.IsActive == true)
+				.AsNoTracking());
+		}
+		public async Task<IEnumerable<Rate>> GetDeletedRatesAsync() {
+			return await Task.FromResult(_context.Rates
+				.Include(x => x.Currency)
+				.Where(x => x.IsActive == false)
 				.AsNoTracking());
 		}
 		public async Task<Rate> GetRateAsync(Guid id) {
@@ -44,8 +47,8 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			}
 			return entity;
 		}
-		public async Task<Rate> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
-			var entity = await _context.Rates.Where(x => x.CurrencyId == baseCurrencyId
+		public async Task<Rate> GetRateByCurrencyAsync(Guid currencyId) {
+			var entity = await _context.Rates.Where(x => x.CurrencyId == currencyId
 			&& x.IsActive == true).FirstOrDefaultAsync();
 			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such base and target currencies id not found");
@@ -70,24 +73,6 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			await _context.SaveChangesAsync();
 			return entity;
 		}
-		public async Task<Rate> DeleteRateAsync(Guid id) {
-			var entity = await _context.Rates
-				.Include(x => x.Currency)
-				.Where(x => x.Id == id && x.IsActive == true)
-				.FirstOrDefaultAsync();
-			if (entity == null) {
-				throw new RecordNotFoundException(404, "DataAccess", "A rate with such id was not found in the database");
-			}
-			SetDeleteDefaultValues(entity);
-			await _context.SaveChangesAsync();
-			return entity;
-		}
-		public async Task<IEnumerable<Rate>> GetDeletedRates() {
-			return await Task.FromResult(_context.Rates
-				.Include(x => x.Currency)
-				.Where(x => x.IsActive == false)
-				.AsNoTracking());
-		}
 		public async Task<Rate> ActivateDeletedRateAsync(Rate entity) {
 			var oldEntity = await _context.Rates
 				.Include(x => x.Currency)
@@ -100,5 +85,19 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			await _context.SaveChangesAsync();
 			return entity;
 		}
+		public async Task<Rate> DeleteRateAsync(Guid id) {
+			var entity = await _context.Rates
+				.Include(x => x.Currency)
+				.Where(x => x.Id == id && x.IsActive == true)
+				.FirstOrDefaultAsync();
+			if (entity == null) {
+				throw new RecordNotFoundException(404, "DataAccess", "A rate with such id was not found in the database");
+			}
+			SetDeleteDefaultValues(entity);
+			await _context.SaveChangesAsync();
+			return entity;
+		}
+
+		#endregion
 	}
 }

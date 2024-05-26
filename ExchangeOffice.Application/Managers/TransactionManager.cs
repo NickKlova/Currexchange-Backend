@@ -36,7 +36,7 @@ namespace ExchangeOffice.Application.Managers {
 		}
 
 		private async Task<RateDto> GetCurrentRateAsync(Guid rateId) {
-			return await _rateManager.GetRateByCurrenciesAsync(rateId, rateId);
+			return await _rateManager.GetRateAsync(rateId);
 
 		}
 

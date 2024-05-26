@@ -4,25 +4,33 @@ using ExchangeOffice.Application.Services.Interfaces;
 
 namespace ExchangeOffice.Application.Managers {
 	public class RateManager : IRateManager {
+		#region Fields: Private
+
 		private readonly IRateService _service;
+
+		#endregion
+
+		#region Constructors: Public
+
 		public RateManager(IRateService service) {
 			_service = service;
 		}
 
-		public async Task<IEnumerable<RateDto>> GetRatesByTargetCurrencyIdAsync(Guid targetCurrencyId) {
-			return await _service.GetRatesByTargetCurrencyIdAsync(targetCurrencyId);
-		}
-		public async Task<IEnumerable<RateDto>> GetRatesByBaseCurrencyIdAsync(Guid baseCurrencyId) {
-			return await _service.GetRatesByBaseCurrencyIdAsync(baseCurrencyId);
-		}
+		#endregion
+
+		#region Methods: Public
+
 		public async Task<IEnumerable<RateDto>> GetRatesAsync() {
 			return await _service.GetRatesAsync();
+		}
+		public async Task<IEnumerable<RateDto>> GetDeletedRatesAsync() {
+			return await _service.GetDeletedRatesAsync();
 		}
 		public async Task<RateDto> GetRateAsync(Guid id) {
 			return await _service.GetRateAsync(id);
 		}
-		public async Task<RateDto> GetRateByCurrenciesAsync(Guid baseCurrencyId, Guid targetCurrencyId) {
-			return await _service.GetRateByCurrenciesAsync(baseCurrencyId, targetCurrencyId);
+		public async Task<RateDto> GetRateByCurrencyAsync(Guid currencyId) {
+			return await _service.GetRateByCurrencyAsync(currencyId);
 		}
 		public async Task<RateDto> AddRateAsync(InsertRateDto entity) {
 			return await _service.AddRateAsync(entity);
@@ -33,11 +41,10 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<RateDto> DeleteRateAsync(Guid id) {
 			return await _service.DeleteRateAsync(id);
 		}
-		public async Task<IEnumerable<RateDto>> GetDeletedRates() {
-			return await _service.GetDeletedRates();
-		}
 		public async Task<RateDto> ActivateDeletedRateAsync(Guid id, InsertRateDto entity) {
 			return await _service.ActivateDeletedRateAsync(id, entity);
 		}
+
+		#endregion
 	}
 }

@@ -33,12 +33,12 @@ namespace ExchangeOffice.API.Controllers {
 			return await _manager.AddCurrencyAsync(data);
 		}
 
-		[HttpPut("update")]
+		[HttpPut("update/{id}")]
 		public async Task<CurrencyDto> UpdateCurrencyAsync(Guid id, [FromBody]InsertCurrencyDto data) {
 			return await _manager.UpdateCurrencyAsync(id, data);
 		}
 
-		[HttpDelete("delete")]
+		[HttpDelete("delete/{id}")]
 		public async Task<CurrencyDto> DeleteCurrencyAsync(Guid id) {
 			return await _manager.DeleteCurrencyAsync(id);
 		}

@@ -2,10 +2,8 @@
 using ExchangeOffice.Application.DTO;
 using ExchangeOffice.Application.Managers.Interfaces;
 using ExchangeOffice.Application.Services.Interfaces;
-using ExchangeOffice.DataAccess.DAO;
 using ExchangeOffice.Integration.BankGov.Managers.Interfaces;
 using ExchangeOffice.Integration.BankGov.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExchangeOffice.Application.Managers {
 	public class CurrencyManager : ICurrencyManager {
@@ -59,15 +57,19 @@ namespace ExchangeOffice.Application.Managers {
 		private async Task ActivateDeletedCurrency(CurrencyDto entity, InsertCurrencyDto data) {
 			await _service.ActivateCurrencyAsync(entity.Id, data);
 			var deletedFunds = await _fundManager.GetDeletedFundsAsync();
-			var deletedFund = deletedFunds.Where(x => x.Currency.Id == entity.Id).FirstOrDefault();
+			var deletedFund = deletedFunds.Where(x => x.Currency != null && x.Currency.Id == entity.Id).FirstOrDefault();
 			if (deletedFund != null) {
 				var insertFund = _mapper.Map<InsertFundDto>(deletedFund);
 				await _fundManager.ActivateDeletedFundAsync(deletedFund.Id, insertFund);
 			}
 
-			var deletedRates = await _rateManager.GetDeletedRates();
-			var deletedRate = deletedRates.Where(x => x.Currency.Id == entity.Id).FirstOrDefault();
+			var deletedRates = await _rateManager.GetDeletedRatesAsync();
+			var deletedRate = deletedRates.Where(x => x.Currency != null && x.Currency.Id == entity.Id).FirstOrDefault();
 			if (deletedRate != null) {
+				if (string.IsNullOrEmpty(entity.BankGovId)) {
+					// TODO: Change exception to global commons
+					throw new Exception("");
+				}
 				var rate = await GetBankGovRate(entity.BankGovId);
 				var rateEntity = new InsertRateDto() {
 					CurrencyId = entity.Id,
