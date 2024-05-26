@@ -21,6 +21,7 @@ namespace ExchangeOffice.DataAccess {
 				.HasOne(r => r.Currency)
 				.WithMany()
 				.HasForeignKey(r => r.CurrencyId)
+				.IsRequired()
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Fund>()

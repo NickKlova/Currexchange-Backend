@@ -4,18 +4,33 @@ using ExchangeOffice.Application.Services.Interfaces;
 
 namespace ExchangeOffice.Application.Managers {
 	public class FundManager : IFundManager {
+		#region Fields: Private
+
 		private readonly IFundService _service;
+
+		#endregion
+
+		#region Constructors: Public
+
 		public FundManager(IFundService service) {
 			_service = service;
+		}
+
+		#endregion
+
+		#region Methods: Public
+
+		public async Task<IEnumerable<FundDto>> GetDeletedFundsAsync() {
+			return await _service.GetDeletedFundsAsync();
+		}
+		public async Task<IEnumerable<FundDto>> GetFundsAsync() {
+			return await _service.GetFundsAsync();
 		}
 		public async Task<FundDto> GetFundAsync(Guid id) {
 			return await _service.GetFundAsync(id);
 		}
 		public async Task<FundDto> GetFundByCurrencyIdAsync(Guid currencyId) {
 			return await _service.GetFundByCurrencyIdAsync(currencyId);
-		}
-		public async Task<IEnumerable<FundDto>> GetFundsAsync() {
-			return await _service.GetFundsAsync();
 		}
 		public async Task<FundDto> AddFundAsync(InsertFundDto entity) {
 			return await _service.AddFundAsync(entity);
@@ -26,15 +41,13 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<FundDto> UpdateFundAsync(Guid id, InsertFundDto entity) {
 			return await _service.UpdateFundAsync(id, entity);
 		}
-		public async Task<FundDto> DeleteFundAsync(Guid id) {
-			return await _service.DeleteFundAsync(id);
-		}
-		public async Task<IEnumerable<FundDto>> GetDeletedFundsAsync() {
-			return await _service.GetDeletedFundsAsync();
-		}
-
 		public async Task<FundDto> ActivateDeletedFundAsync(Guid id, InsertFundDto entity) {
 			return await _service.ActivateDeletedFundAsync(id, entity);
 		}
+		public async Task<FundDto> DeleteFundAsync(Guid id) {
+			return await _service.DeleteFundAsync(id);
+		}
+
+		#endregion
 	}
 }

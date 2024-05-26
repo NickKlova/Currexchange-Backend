@@ -27,7 +27,8 @@ namespace ExchangeOffice.DataAccess.DAO.Mappers {
 		}
 		private void CreateFundMapper() {
 			CreateMap<Fund, Fund>()
-				.ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency))
+				.ForMember(dest => dest.CurrencyId, opt => opt.Ignore())
+				.ForMember(dest => dest.Currency, opt => opt.Ignore())
 				.ForMember(dest => dest.Id, opt => opt.Ignore())
 				.ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
 				.ForMember(dest => dest.ModifiedOn, opt => opt.MapFrom(src => DateTime.UtcNow))
