@@ -12,6 +12,15 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 			CreateUserMappers();
 			CreateTransactionMappers();
 			CreateReservationMappers();
+			CreateReservationStatusMappers();
+			CreateOperationTypeMappers();
+			CreateTransactionTypeMapper();
+			CreateIssuanceLogMappers();
+		}
+
+		private void CreateIssuanceLogMappers() {
+			CreateMap<InsertIssuanceLogDto, IssuanceLog>();
+			CreateMap<IssuanceLog, IssuanceLogDto>();
 		}
 
 		private void CreateCurrencyMappers() {
@@ -71,6 +80,10 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 			CreateMap<Contact, ContactDto>();
 		}
 
+		public void CreateTransactionTypeMapper() {
+			CreateMap<TransactionType, TransactionTypeDto>();
+		}
+
 		private void CreateTransactionMappers() {
 			CreateMap<IEnumerable<Transaction>, IEnumerable<TransactionDto>>()
 				.ConvertUsing((src, dest, context) => src.Select(x => context.Mapper.Map<TransactionDto>(x)));
@@ -78,6 +91,14 @@ namespace ExchangeOffice.Application.DTO.Mappers {
 			CreateMap<InsertTransactionDto, Transaction>();
 
 			CreateMap<Transaction, TransactionDto>();
+		}
+
+		private void CreateReservationStatusMappers() {
+			CreateMap<ReservationStatus, ReservationStatusDto>();
+		}
+
+		private void CreateOperationTypeMappers() { 
+			CreateMap<OperationType, OperationTypeDto>();
 		}
 
 		private void CreateReservationMappers() {

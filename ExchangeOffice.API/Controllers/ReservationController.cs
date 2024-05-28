@@ -37,5 +37,10 @@ namespace ExchangeOffice.API.Controllers {
 		public async Task<ReservationDto> DeleteReservationAsync(Guid id) {
 			return await _manager.DeleteReservationAsync(id);
 		}
+
+		[HttpGet("get/bycontact/{contactId}")]
+		public async Task<IEnumerable<ReservationDto>> GetReservationsByContact(Guid contactId) {
+			return await _manager.GetReservationsByContact(contactId);
+		}
 	}
 }

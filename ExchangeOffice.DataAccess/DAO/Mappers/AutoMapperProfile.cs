@@ -54,7 +54,7 @@ namespace ExchangeOffice.DataAccess.DAO.Mappers {
 		private void CreateTransactionMapper() {
 			CreateMap<Transaction, Transaction>()
 				.ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
-				.ForMember(dest => dest.Rate, opt => opt.MapFrom(src => src.Rate))
+				.ForMember(dest => dest.RateLog, opt => opt.MapFrom(src => src.RateLog))
 				.ForMember(dest => dest.Id, opt => opt.Ignore())
 				.ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
 				.ForMember(dest => dest.ModifiedOn, opt => opt.MapFrom(src => DateTime.UtcNow))

@@ -28,5 +28,10 @@ namespace ExchangeOffice.Application.Managers {
 		public async Task<ReservationDto> GetReservationAsync(Guid id) {
 			return await _service.GetReservationAsync(id);
 		}
+
+		public async Task<IEnumerable<ReservationDto>> GetReservationsByContact(Guid contactId) {
+			var reservations = await _service.GetReservationsAsync();
+			return reservations.Where(x=>x.Contact != null && x.Contact.Id == contactId);
+		}
 	}
 }

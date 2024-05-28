@@ -14,6 +14,11 @@ namespace ExchangeOffice.DataAccess {
 		public DbSet<UserRole> UserRoles { get; set; }
 		public DbSet<Transaction> Transactions { get; set; }
 		public DbSet<Reservation> Reservations { get; set; }
+		public DbSet<OperationType> OperationTypes { get; set; }
+		public DbSet<ReservationStatus> ReservationStatuses { get; set; }
+		public DbSet<TransactionType> TransactionTypes { get; set; }
+		public DbSet<IssuanceLog> IssuanceLogs { get; set; }
+		public DbSet<ExchangeSetting> ExchangeSettings { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			base.OnModelCreating(modelBuilder);
 
@@ -53,9 +58,21 @@ namespace ExchangeOffice.DataAccess {
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Transaction>()
-				.HasOne(r => r.Rate)
+				.HasOne(r => r.RateLog)
 				.WithMany()
-				.HasForeignKey(r => r.RateId)
+				.HasForeignKey(r => r.RateLogId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Transaction>()
+				.HasOne(r => r.OperationType)
+				.WithMany()
+				.HasForeignKey(r => r.OperationId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Transaction>()
+				.HasOne(r=>r.TransactionType)
+				.WithMany()
+				.HasForeignKey(r => r.TypeId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			modelBuilder.Entity<Reservation>()
@@ -70,6 +87,16 @@ namespace ExchangeOffice.DataAccess {
 				.HasForeignKey(r => r.RateId)
 				.OnDelete(DeleteBehavior.Restrict);
 
+			modelBuilder.Entity<Reservation>()
+				.HasOne(r => r.Status)
+				.WithMany()
+				.HasForeignKey(r => r.StatusId);
+
+			modelBuilder.Entity<Reservation>()
+				.HasOne(r => r.OperationType)
+				.WithMany()
+				.HasForeignKey(r => r.OperationId);
+
 			modelBuilder.Entity<UserRole>()
 				.HasData(InitialDataExtension.GetUserRoles());
 
@@ -82,6 +109,18 @@ namespace ExchangeOffice.DataAccess {
 
 			modelBuilder.Entity<Fund>()
 				.HasData(InitialDataExtension.GetFunds());
+
+			modelBuilder.Entity<ReservationStatus>()
+				.HasData(InitialDataExtension.GetReservationStatuses());
+
+			modelBuilder.Entity<OperationType>()
+				.HasData(InitialDataExtension.GetOperationTypes());
+
+			modelBuilder.Entity<TransactionType>()
+				.HasData(InitialDataExtension.GetTransactionTypes());
+
+			modelBuilder.Entity<ExchangeSetting>()
+				.HasData(InitialDataExtension.GetExchangeSettings());
 		}
 	}
 }

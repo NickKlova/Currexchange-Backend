@@ -54,16 +54,16 @@ namespace ExchangeOffice.Application.Managers {
 
 		public async Task<TransactionDto> UpdateTransactionAsync(Guid id, InsertTransactionDto transaction) {
 			var baseCurrencyAmount = transaction.Amount;
-			var rate = await GetCurrentRateAsync(transaction.RateId);
-			decimal targetAmount;
-			if (transaction.IsSale) {
-				targetAmount = -(rate.SellRate * baseCurrencyAmount);
-				//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
-				//wait UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
-				return await _service.UpdateTransactionAsync(id, transaction);
-			}
+			//var rate = await GetCurrentRateAsync(transaction.RateId);
+			//decimal targetAmount;
+			//if (transaction.IsSale) {
+			//	targetAmount = -(rate.SellRate * baseCurrencyAmount);
+			//	//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
+			//	//wait UpdateFundAsync(rate.BaseCurrency.Id, baseCurrencyAmount);
+			//	return await _service.UpdateTransactionAsync(id, transaction);
+			//}
 
-			targetAmount = rate.BuyRate * baseCurrencyAmount;
+			//targetAmount = rate.BuyRate * baseCurrencyAmount;
 			//await UpdateFundAsync(rate.TargetCurrency.Id, targetAmount);
 			//await UpdateFundAsync(rate.BaseCurrency.Id, -baseCurrencyAmount);
 			return await _service.UpdateTransactionAsync(id, transaction);

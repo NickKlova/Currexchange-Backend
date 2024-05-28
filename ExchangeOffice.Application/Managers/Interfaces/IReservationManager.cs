@@ -7,5 +7,6 @@ namespace ExchangeOffice.Application.Managers.Interfaces {
 		public Task<ReservationDto> AddReservationAsync(InsertReservationDto reservation);
 		public Task<ReservationDto> UpdateReservationAsync(Guid id, InsertReservationDto reservation);
 		public Task<ReservationDto> DeleteReservationAsync(Guid id);
+		public Task<IEnumerable<ReservationDto>> GetReservationsByContact(Guid contactId);
+		}
 	}
-}

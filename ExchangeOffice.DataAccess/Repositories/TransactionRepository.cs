@@ -18,12 +18,17 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			return await Task.FromResult(_context.Transactions
 				.Where(x=>x.IsActive == true)
 				.Include(x=>x.Contact)
-				.Include(x=>x.Rate)
-				.Include(x=>x.Rate.Currency)
+				.Include(x=>x.RateLog)
+				.Include(x=>x.RateLog.Currency)
+				.Include(x=>x.TransactionType)
+				.Include(x=>x.OperationType)
+				.Include(x=>x.Reservation)
 				.AsNoTracking());
 		}
 		public async Task<Transaction> CreateTransactionAsync(Transaction entity) {
 			SetDefaultValues(entity);
+			SetDefaultValues(entity.RateLog);
+			entity.RateLogId = entity.RateLog.Id;
 			await _context.Transactions.AddAsync(entity);
 			await _context.SaveChangesAsync();
 			return entity;

@@ -48,7 +48,8 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			return entity;
 		}
 		public async Task<Rate> GetRateByCurrencyAsync(Guid currencyId) {
-			var entity = await _context.Rates.Where(x => x.CurrencyId == currencyId
+			var entity = await _context.Rates
+				.Include(x=>x.Currency).Where(x => x.CurrencyId == currencyId
 			&& x.IsActive == true).FirstOrDefaultAsync();
 			if (entity == null) {
 				throw new RecordNotFoundException(404, "DataAccess", "Rate with such base and target currencies id not found");

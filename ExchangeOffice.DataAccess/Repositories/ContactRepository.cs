@@ -8,12 +8,23 @@ using System.Data;
 
 namespace ExchangeOffice.DataAccess.Repositories {
 	public class ContactRepository : BaseRepository, IContactRepository {
+		#region Fields: Private
+
 		private readonly DataAccessContext _context;
 		private readonly IMapper _mapper;
+
+		#endregion
+
+		#region Constructors: Public
+
 		public ContactRepository(DataAccessContext context, IMapper mapper) {
 			_context = context;
 			_mapper = mapper;
 		}
+
+		#endregion
+
+		#region Methods: Public
 
 		public async Task<IEnumerable<Contact>> GetContactsAsync() {
 			return await Task.FromResult(_context.Contacts.Where(x => x.IsActive == true).AsNoTracking());
@@ -58,5 +69,7 @@ namespace ExchangeOffice.DataAccess.Repositories {
 			await _context.SaveChangesAsync();
 			return entity;
 		}
+
+		#endregion
 	}
 }
